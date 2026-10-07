@@ -286,11 +286,95 @@ function renderPropertiesTable(properties) {
             <td><span class="badge badge-active">${p.unit_count} Units</span></td>
             <td class="actions-cell">
                 <button class="btn btn-sm btn-action-view" onclick="openViewPropertyModal(${p.property_id})">View</button>
+                <button class="btn btn-sm btn-action-edit" onclick="openEditPropertyModal(${p.property_id})">Edit</button>
                 <button class="btn btn-sm btn-action-delete" onclick="confirmDeleteProperty(${p.property_id}, '${escapeJs(p.address)}')">Delete</button>
             </td>
         </tr>
     `).join('');
 }
+
+/* Edit Property Modal */
+function openEditPropertyModal(propertyId) {
+    Promise.all([
+        fetch(`/api/properties/${propertyId}`).then(r => r.json()),
+        cachedOwners.length > 0 ? Promise.resolve({ status: 'success', data: cachedOwners }) : fetch('/api/owners').then(r => r.json())
+    ]).then(([propRes, ownerRes]) => {
+        if (propRes.status === 'success' && ownerRes.status === 'success') {
+            const p = propRes.data;
+            cachedOwners = ownerRes.data || [];
+            const ownerOptions = cachedOwners.map(o => 
+                `<option value="${o.owner_id}" ${o.owner_id === p.owner_id ? 'selected' : ''}>${escapeHtml(o.name)} (${escapeHtml(o.phone || 'No Phone')})</option>`
+            ).join('');
+
+            const bodyHtml = `
+                <form id="edit-property-form">
+                    <div class="form-group">
+                        <label>Property Owner *</label>
+                        <select id="edit-prop-owner-id" class="form-select" required>
+                            <option value="">Select Owner...</option>
+                            ${ownerOptions}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Property Address *</label>
+                        <input type="text" id="edit-prop-address" class="form-control" value="${escapeHtml(p.address)}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" id="edit-prop-city" class="form-control" value="${escapeHtml(p.city)}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Property Type *</label>
+                        <select id="edit-prop-type" class="form-select" required>
+                            <option value="Apartment Complex" ${p.property_type === 'Apartment Complex' ? 'selected' : ''}>Apartment Complex</option>
+                            <option value="Residential Building" ${p.property_type === 'Residential Building' ? 'selected' : ''}>Residential Building</option>
+                            <option value="Commercial Building" ${p.property_type === 'Commercial Building' ? 'selected' : ''}>Commercial Building</option>
+                            <option value="Villa" ${p.property_type === 'Villa' ? 'selected' : ''}>Villa</option>
+                        </select>
+                    </div>
+                </form>
+            `;
+
+            const footerHtml = `
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitEditPropertyForm(${p.property_id})">Update Property</button>
+            `;
+
+            openModal(`Edit Property #${p.property_id}`, bodyHtml, footerHtml);
+        }
+    }).catch(() => showToast('Failed to load property details for editing.', 'error'));
+}
+
+function submitEditPropertyForm(propertyId) {
+    const owner_id = document.getElementById('edit-prop-owner-id').value;
+    const address = document.getElementById('edit-prop-address').value.trim();
+    const city = document.getElementById('edit-prop-city').value.trim();
+    const property_type = document.getElementById('edit-prop-type').value.trim();
+
+    if (!owner_id || !address || !city || !property_type) {
+        showToast('Please fill in all required fields.', 'error');
+        return;
+    }
+
+    fetch(`/api/properties/${propertyId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ owner_id, address, city, property_type })
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.status === 'success') {
+            showToast(res.message || 'Property updated successfully!', 'success');
+            closeModal();
+            loadPropertiesPage();
+            loadDashboardMetrics();
+        } else {
+            showToast(res.message || 'Failed to update property.', 'error');
+        }
+    })
+    .catch(() => showToast('Server error while updating property.', 'error'));
+}
+
 
 /* Add Property Modal */
 function openAddPropertyModal() {
@@ -560,12 +644,107 @@ function renderUnitsTable(units) {
                 <td><span class="badge ${badgeClass}">${escapeHtml(u.status)}</span></td>
                 <td class="actions-cell">
                     <button class="btn btn-sm btn-action-view" onclick="openViewUnitModal(${u.unit_id})">View</button>
+                    <button class="btn btn-sm btn-action-edit" onclick="openEditUnitModal(${u.unit_id})">Edit</button>
                     <button class="btn btn-sm btn-action-delete" onclick="confirmDeleteUnit(${u.unit_id}, '${escapeJs(u.unit_no)}')">Delete</button>
                 </td>
             </tr>
         `;
     }).join('');
 }
+
+/* Edit Unit Modal */
+function openEditUnitModal(unitId) {
+    Promise.all([
+        fetch(`/api/units/${unitId}`).then(r => r.json()),
+        cachedProperties.length > 0 ? Promise.resolve({ status: 'success', data: cachedProperties }) : fetch('/api/properties').then(r => r.json())
+    ]).then(([unitRes, propRes]) => {
+        if (unitRes.status === 'success' && propRes.status === 'success') {
+            const u = unitRes.data;
+            cachedProperties = propRes.data || [];
+            const propertyOptions = cachedProperties.map(p => 
+                `<option value="${p.property_id}" ${p.property_id === u.property_id ? 'selected' : ''}>${escapeHtml(p.address)} (${escapeHtml(p.city)})</option>`
+            ).join('');
+
+            const bodyHtml = `
+                <form id="edit-unit-form">
+                    <div class="form-group">
+                        <label>Property *</label>
+                        <select id="edit-unit-property-id" class="form-select" required>
+                            <option value="">Select Property...</option>
+                            ${propertyOptions}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Unit Number *</label>
+                        <input type="text" id="edit-unit-no" class="form-control" value="${escapeHtml(u.unit_no)}" required>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="form-group">
+                            <label>Floor Number</label>
+                            <input type="number" id="edit-unit-floor" class="form-control" value="${u.floor || 1}" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Bedrooms (BHK)</label>
+                            <input type="number" id="edit-unit-bedrooms" class="form-control" value="${u.bedrooms || 1}" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Monthly Rent Amount (₹) *</label>
+                        <input type="number" id="edit-unit-rent" class="form-control" value="${u.rent_amount}" step="500" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="edit-unit-status" class="form-select" required>
+                            <option value="Available" ${u.status === 'Available' ? 'selected' : ''}>Available</option>
+                            <option value="Occupied" ${u.status === 'Occupied' ? 'selected' : ''}>Occupied</option>
+                            <option value="Maintenance" ${u.status === 'Maintenance' ? 'selected' : ''}>Maintenance</option>
+                        </select>
+                    </div>
+                </form>
+            `;
+
+            const footerHtml = `
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitEditUnitForm(${u.unit_id})">Update Unit</button>
+            `;
+
+            openModal(`Edit Unit #${u.unit_id}`, bodyHtml, footerHtml);
+        }
+    }).catch(() => showToast('Failed to load unit details for editing.', 'error'));
+}
+
+function submitEditUnitForm(unitId) {
+    const property_id = document.getElementById('edit-unit-property-id').value;
+    const unit_no = document.getElementById('edit-unit-no').value.trim();
+    const floor = document.getElementById('edit-unit-floor').value;
+    const bedrooms = document.getElementById('edit-unit-bedrooms').value;
+    const rent_amount = document.getElementById('edit-unit-rent').value;
+    const status = document.getElementById('edit-unit-status').value;
+
+    if (!property_id || !unit_no || !rent_amount) {
+        showToast('Property, Unit Number, and Rent Amount are required.', 'error');
+        return;
+    }
+
+    fetch(`/api/units/${unitId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ property_id, unit_no, floor, bedrooms, rent_amount, status })
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.status === 'success') {
+            showToast(res.message || 'Unit updated successfully!', 'success');
+            closeModal();
+            loadUnitsPage();
+            loadDashboardMetrics();
+        } else {
+            showToast(res.message || 'Failed to update unit.', 'error');
+        }
+    })
+    .catch(() => showToast('Server error while updating unit.', 'error'));
+}
+
 
 /* Add Unit Modal */
 function openAddUnitModal() {

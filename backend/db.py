@@ -263,6 +263,29 @@ def delete_property(property_id):
             }
         return {'success': False, 'message': f'Database error: {err.msg}'}
 
+def update_property(property_id, owner_id, address, city, property_type):
+    """Update an existing property record in MySQL."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            UPDATE property
+            SET owner_id = %s, address = %s, city = %s, property_type = %s
+            WHERE property_id = %s;
+        """, (owner_id, address, city, property_type, property_id))
+        conn.commit()
+        affected = cursor.rowcount
+        cursor.close()
+        conn.close()
+        if affected > 0:
+            return {'success': True, 'message': 'Property updated successfully!'}
+        else:
+            return {'success': True, 'message': 'No changes made or property not found.'}
+    except mysql.connector.Error as err:
+        cursor.close()
+        conn.close()
+        return {'success': False, 'message': f'Database error: {err.msg}'}
+
 # ==============================================================================
 # UNITS CRUD
 # ==============================================================================
@@ -387,6 +410,29 @@ def delete_unit(unit_id):
             }
         return {'success': False, 'message': f'Database error: {err.msg}'}
 
+def update_unit(unit_id, property_id, unit_no, floor, bedrooms, rent_amount, status):
+    """Update an existing unit record in MySQL."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            UPDATE unit
+            SET property_id = %s, unit_no = %s, floor = %s, bedrooms = %s, rent_amount = %s, status = %s
+            WHERE unit_id = %s;
+        """, (property_id, unit_no, floor, bedrooms, rent_amount, status, unit_id))
+        conn.commit()
+        affected = cursor.rowcount
+        cursor.close()
+        conn.close()
+        if affected > 0:
+            return {'success': True, 'message': 'Unit updated successfully!'}
+        else:
+            return {'success': True, 'message': 'No changes made or unit not found.'}
+    except mysql.connector.Error as err:
+        cursor.close()
+        conn.close()
+        return {'success': False, 'message': f'Database error: {err.msg}'}
+
 # ==============================================================================
 # TENANTS CRUD
 # ==============================================================================
@@ -475,6 +521,29 @@ def delete_tenant(tenant_id):
                 'success': False,
                 'message': 'Cannot delete tenant: Active lease or maintenance records exist. Remove those first.'
             }
+        return {'success': False, 'message': f'Database error: {err.msg}'}
+
+def update_tenant(tenant_id, name, phone, email, id_proof_no):
+    """Update an existing tenant record in MySQL."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            UPDATE tenant
+            SET name = %s, phone = %s, email = %s, id_proof_no = %s
+            WHERE tenant_id = %s;
+        """, (name, phone or None, email or None, id_proof_no or None, tenant_id))
+        conn.commit()
+        affected = cursor.rowcount
+        cursor.close()
+        conn.close()
+        if affected > 0:
+            return {'success': True, 'message': 'Tenant updated successfully!'}
+        else:
+            return {'success': True, 'message': 'No changes made or tenant not found.'}
+    except mysql.connector.Error as err:
+        cursor.close()
+        conn.close()
         return {'success': False, 'message': f'Database error: {err.msg}'}
 
 # ==============================================================================

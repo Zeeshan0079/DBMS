@@ -118,6 +118,27 @@ def api_property_delete(prop_id):
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/api/properties/<int:prop_id>', methods=['PUT', 'POST'])
+def api_property_update(prop_id):
+    try:
+        req_data = request.get_json() or {}
+        owner_id = req_data.get('owner_id')
+        address = req_data.get('address', '').strip()
+        city = req_data.get('city', '').strip()
+        property_type = req_data.get('property_type', '').strip()
+
+        if not owner_id or not address or not city or not property_type:
+            return jsonify({'status': 'error', 'message': 'All fields (Owner, Address, City, Property Type) are required.'}), 400
+
+        res = db.update_property(prop_id, owner_id, address, city, property_type)
+        if res['success']:
+            return jsonify({'status': 'success', 'message': res['message']})
+        else:
+            return jsonify({'status': 'error', 'message': res['message']}), 400
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
 # ==============================================================================
 # UNITS API
 # ==============================================================================
@@ -184,6 +205,35 @@ def api_unit_delete(unit_id):
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/api/units/<int:unit_id>', methods=['PUT', 'POST'])
+def api_unit_update(unit_id):
+    try:
+        req_data = request.get_json() or {}
+        property_id = req_data.get('property_id')
+        unit_no = req_data.get('unit_no', '').strip()
+        floor = req_data.get('floor')
+        bedrooms = req_data.get('bedrooms')
+        rent_amount = req_data.get('rent_amount')
+        status = req_data.get('status', 'Available').strip()
+
+        if not property_id or not unit_no or rent_amount is None:
+            return jsonify({'status': 'error', 'message': 'Property, Unit Number, and Rent Amount are required.'}), 400
+
+        try:
+            floor = int(floor) if floor is not None and str(floor).strip() != '' else 1
+            bedrooms = int(bedrooms) if bedrooms is not None and str(bedrooms).strip() != '' else 1
+            rent_amount = float(rent_amount)
+        except ValueError:
+            return jsonify({'status': 'error', 'message': 'Invalid numeric values for floor, bedrooms, or rent.'}), 400
+
+        res = db.update_unit(unit_id, property_id, unit_no, floor, bedrooms, rent_amount, status)
+        if res['success']:
+            return jsonify({'status': 'success', 'message': res['message']})
+        else:
+            return jsonify({'status': 'error', 'message': res['message']}), 400
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 # ==============================================================================
 # TENANTS API
 # ==============================================================================
@@ -233,6 +283,26 @@ def api_tenant_delete(tenant_id):
         return jsonify({'status': 'error', 'message': res['message']}), 400
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/tenants/<int:tenant_id>', methods=['PUT', 'POST'])
+def api_tenant_update(tenant_id):
+    try:
+        req_data = request.get_json() or {}
+        name = req_data.get('name', '').strip()
+        phone = req_data.get('phone', '').strip()
+        email = req_data.get('email', '').strip()
+        id_proof_no = req_data.get('id_proof_no', '').strip()
+
+        if not name:
+            return jsonify({'status': 'error', 'message': 'Tenant name is required.'}), 400
+
+        res = db.update_tenant(tenant_id, name, phone, email, id_proof_no)
+        if res['success']:
+            return jsonify({'status': 'success', 'message': res['message']})
+        return jsonify({'status': 'error', 'message': res['message']}), 400
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 # ==============================================================================
 # LEASES API
