@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROPERTYDESK - Enterprise Property Rental & Lease Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <!-- MODAL OVERLAY -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div id="modal-box" class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic Modal Content -->
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <!-- Dynamic Modal Footer -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         SIDEBAR NAVIGATION
+         ========================================================================== -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">
+                <img src="{{ url_for('static', filename='propertydesk_logo.png') }}" alt="PropertyDesk Logo" class="brand-logo-img">
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <!-- OVERVIEW -->
+            <div class="nav-section">
+                <div class="nav-section-title">Overview</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-page="dashboard">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- MANAGEMENT -->
+            <div class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="properties">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21h18M3 7l9-4 9 4v14H3V7z"/><path d="M9 21v-6h6v6"/></svg>
+                            <span>Properties</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="units">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            <span>Units</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="tenants">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <span>Tenants</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="leases">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            <span>Leases</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- FINANCE -->
+            <div class="nav-section">
+                <div class="nav-section-title">Finance</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="finance">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            <span>Rent & Payments</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- OPERATIONS -->
+            <div class="nav-section">
+                <div class="nav-section-title">Operations</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="maintenance">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                            <span>Maintenance</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- ANALYTICS -->
+            <div class="nav-section">
+                <div class="nav-section-title">Analytics</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link" data-page="reports">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="db-status-pill">
+                <span class="status-dot"></span>
+                <span id="db-status-text">Database Connected</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==========================================================================
+         MAIN CONTENT AREA
+         ========================================================================== -->
+    <main class="main-content">
+        
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <div class="header-title-group">
+                <h2 id="current-page-title">Dashboard</h2>
+                <p id="current-page-subtitle">Property portfolio analytics & real-time activity</p>
+            </div>
+
+            <div class="header-controls">
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" placeholder="Search properties, tenants, leases...">
+                </div>
+
+                <button class="icon-button" title="Notifications">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notification-badge"></span>
+                </button>
+
+                <div class="user-profile">
+                    <div class="avatar">Z</div>
+                    <div class="user-info">
+                        <div class="name">Zeeshan</div>
+                        <div class="role">Property Manager</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE VIEWS CONTAINER -->
+        <div class="page-container">
+
+            <!-- 1. DASHBOARD VIEW -->
+            <section id="dashboard-view" class="page-view active">
+                
+                <!-- UNIFORM METRICS GRID -->
+                <div class="metrics-grid">
+                    <!-- Total Properties -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Total Properties</span>
+                            <div class="metric-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7l9-4 9 4v14H3V7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="metric-total-properties">--</div>
+                        <div class="metric-footer">Portfolio properties</div>
+                    </div>
+
+                    <!-- Total Units -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Total Units</span>
+                            <div class="metric-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="metric-total-units">--</div>
+                        <div class="metric-footer">Total unit inventory</div>
+                    </div>
+
+                    <!-- Available Units -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Available Units</span>
+                            <div class="metric-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="metric-available-units">--</div>
+                        <div class="metric-footer">Vacant & ready for lease</div>
+                    </div>
+
+                    <!-- Occupied Units -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Occupied Units</span>
+                            <div class="metric-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="metric-occupied-units">--</div>
+                        <div class="metric-footer">Occupied unit contracts</div>
+                    </div>
+
+                    <!-- Total Tenants -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Total Tenants</span>
+                            <div class="metric-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="metric-total-tenants">--</div>
+                        <div class="metric-footer">Registered occupants</div>
+                    </div>
+
+                    <!-- Active Leases -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Active Leases</span>
+                            <div class="metric-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="metric-active-leases">--</div>
+                        <div class="metric-footer">Active lease agreements</div>
+                    </div>
+                </div>
+
+                <!-- DASHBOARD LAYOUT GRID -->
+                <div class="dashboard-layout">
+                    
+                    <!-- LEFT COLUMN -->
+                    <div class="dashboard-main-col">
+                        
+                        <!-- OCCUPANCY OVERVIEW -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">Occupancy Overview</div>
+                                    <div class="card-subtitle">Real-time status breakdown across unit inventory</div>
+                                </div>
+                            </div>
+                            <div class="occupancy-box">
+                                <div class="progress-bar-wrap">
+                                    <div class="bar-segment bar-occupied" id="bar-occupied" style="width: 0%"></div>
+                                    <div class="bar-segment bar-available" id="bar-available" style="width: 0%"></div>
+                                    <div class="bar-segment bar-maintenance" id="bar-maintenance" style="width: 0%"></div>
+                                </div>
+                                <div class="occupancy-legend">
+                                    <div class="legend-item">
+                                        <span class="dot dot-occupied"></span>
+                                        <span>Occupied:</span>
+                                        <span class="legend-count" id="count-occupied">--</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="dot dot-available"></span>
+                                        <span>Available:</span>
+                                        <span class="legend-count" id="count-available">--</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="dot dot-maintenance"></span>
+                                        <span>Maintenance:</span>
+                                        <span class="legend-count" id="count-maintenance">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RECENT LEASE ACTIVITY -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">Recent Lease Activity</div>
+                                    <div class="card-subtitle">Latest lease agreements recorded in system</div>
+                                </div>
+                                <a class="view-all-link" onclick="document.querySelector('[data-page=leases]').click()">View All Leases &rarr;</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tenant</th>
+                                            <th>Unit</th>
+                                            <th>Monthly Rent</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-leases-tbody">
+                                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading database records...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- UPCOMING LEASE EXPIRY -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">Upcoming Lease Expiry</div>
+                                    <div class="card-subtitle">Active leases approaching agreement expiration</div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tenant</th>
+                                            <th>Unit</th>
+                                            <th>Expiration Date</th>
+                                            <th>Monthly Rent</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="upcoming-leases-tbody">
+                                        <tr><td colspan="5" style="text-align:center; color: var(--text-muted);">Loading expirations...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="dashboard-side-col">
+                        
+                        <!-- QUICK ACTIONS -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Quick Actions</div>
+                            </div>
+                            <div class="quick-actions-grid">
+                                <div class="action-btn" onclick="openAddPropertyModal()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>+ Add Property</span>
+                                </div>
+                                <div class="action-btn" onclick="openAddUnitModal()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>+ Add Unit</span>
+                                </div>
+                                <div class="action-btn" onclick="document.querySelector('[data-page=tenants]').click()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>+ Add Tenant</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RECENT ACTIVITY STREAM -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Recent Transactions</div>
+                            </div>
+                            <ul class="activity-list" id="activity-list">
+                                <li style="text-align: center; color: var(--text-muted); padding: 10px 0;">Loading activity stream...</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- 2. PROPERTIES VIEW -->
+            <section id="properties-view" class="page-view">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Properties</div>
+                            <div class="card-subtitle">Manage your property portfolio</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddPropertyModal()">+ Add Property</button>
+                    </div>
+
+                    <!-- Toolbar -->
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="prop-search" placeholder="Search address, city, owner..." onkeyup="filterProperties()">
+                        </div>
+
+                        <div class="filter-group">
+                            <select id="prop-city-filter" class="form-select" onchange="filterProperties()">
+                                <option value="All">All Cities</option>
+                            </select>
+
+                            <select id="prop-type-filter" class="form-select" onchange="filterProperties()">
+                                <option value="All">All Property Types</option>
+                            </select>
+
+                            <button class="btn btn-secondary" onclick="loadPropertiesPage()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Owner</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>Property Type</th>
+                                    <th>Units</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="properties-tbody">
+                                <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading property portfolio...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. UNITS VIEW -->
+            <section id="units-view" class="page-view">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Units</div>
+                            <div class="card-subtitle">Manage units across your property portfolio</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddUnitModal()">+ Add Unit</button>
+                    </div>
+
+                    <!-- Toolbar -->
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="unit-search" placeholder="Search unit number, property..." onkeyup="filterUnits()">
+                        </div>
+
+                        <div class="filter-group">
+                            <select id="unit-property-filter" class="form-select" onchange="filterUnits()">
+                                <option value="All">All Properties</option>
+                            </select>
+
+                            <select id="unit-status-filter" class="form-select" onchange="filterUnits()">
+                                <option value="All">All Statuses</option>
+                                <option value="Available">Available</option>
+                                <option value="Occupied">Occupied</option>
+                                <option value="Maintenance">Maintenance</option>
+                            </select>
+
+                            <button class="btn btn-secondary" onclick="loadUnitsPage()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Unit ID</th>
+                                    <th>Property Address</th>
+                                    <th>Unit No</th>
+                                    <th>Floor</th>
+                                    <th>Bedrooms</th>
+                                    <th>Monthly Rent</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="units-tbody">
+                                <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Loading units inventory...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PLACEHOLDER VIEWS FOR OTHER MODULES -->
+            <!-- TENANTS VIEW -->
+            <section id="tenants-view" class="page-view">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Tenants</div>
+                            <div class="card-subtitle">Manage tenant records and rental history</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddTenantModal()">+ Add Tenant</button>
+                    </div>
+
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="tenant-search" placeholder="Search by name, phone or email..." onkeyup="fetchTenantsList()">
+                        </div>
+                        <div class="filter-group">
+                            <button class="btn btn-secondary" onclick="loadTenantsPage()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Tenant ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>ID Proof No.</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tenants-tbody">
+                                <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Loading tenant records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- 5. LEASES VIEW -->
+            <section id="leases-view" class="page-view">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Leases</div>
+                            <div class="card-subtitle">Manage rental agreements and lease lifecycle</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddLeaseModal()">+ Create Lease</button>
+                    </div>
+
+                    <!-- Toolbar -->
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="lease-search" placeholder="Search by tenant, unit, address..." onkeyup="fetchLeasesList()">
+                        </div>
+                        <div class="filter-group">
+                            <button class="btn btn-secondary" onclick="fetchLeasesList()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Table Placeholder -->
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Lease ID</th>
+                                    <th>Tenant</th>
+                                    <th>Unit No</th>
+                                    <th>Property</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Monthly Rent</th>
+                                    <th>Deposit</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leases-tbody">
+                                <tr>
+                                    <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                                        No lease records loaded yet. CRUD backend integration pending.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. FINANCE / PAYMENTS VIEW -->
+            <section id="finance-view" class="page-view">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Rent &amp; Payments</div>
+                            <div class="card-subtitle">Rent schedules and payment transaction records</div>
+                        </div>
+                    </div>
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="payment-search" placeholder="Search by tenant or unit..." onkeyup="fetchPaymentsList()">
+                        </div>
+                        <div class="filter-group">
+                            <select id="payment-status-filter" class="form-select" onchange="fetchPaymentsList()">
+                                <option value="All">All Statuses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Overdue">Overdue</option>
+                            </select>
+                            <button class="btn btn-secondary" onclick="loadFinancePage()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Schedule ID</th>
+                                    <th>Tenant</th>
+                                    <th>Unit</th>
+                                    <th>Due Date</th>
+                                    <th>Amount Due</th>
+                                    <th>Status</th>
+                                    <th>Amount Paid</th>
+                                    <th>Payment Date</th>
+                                    <th>Mode</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payments-tbody">
+                                <tr><td colspan="9" style="text-align:center; color:var(--text-muted);">Loading payment records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. MAINTENANCE VIEW -->
+            <section id="maintenance-view" class="page-view">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Maintenance</div>
+                            <div class="card-subtitle">Service requests and property upkeep records</div>
+                        </div>
+                    </div>
+                    <div class="toolbar">
+                        <div class="search-bar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="maintenance-search" placeholder="Search by tenant, unit or description..." onkeyup="fetchMaintenanceList()">
+                        </div>
+                        <div class="filter-group">
+                            <select id="maintenance-status-filter" class="form-select" onchange="fetchMaintenanceList()">
+                                <option value="All">All Statuses</option>
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                            <button class="btn btn-secondary" onclick="loadMaintenancePage()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tenant</th>
+                                    <th>Unit</th>
+                                    <th>Property</th>
+                                    <th>Request Date</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Cost</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="maintenance-tbody">
+                                <tr><td colspan="9" style="text-align:center; color:var(--text-muted);">Loading maintenance records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. REPORTS VIEW -->
+            <section id="reports-view" class="page-view">
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div><div class="card-title">Vacant Units</div><div class="card-subtitle">Units currently available for lease</div></div>
+                            <button class="btn btn-secondary btn-sm" onclick="loadReport('vacant_units','report-vacant-tbody')">Load Report</button>
+                        </div>
+                        <div class="table-responsive"><table class="custom-table">
+                            <thead><tr><th>Unit ID</th><th>Property</th><th>City</th><th>Unit No</th><th>Floor</th><th>Bedrooms</th><th>Rent</th></tr></thead>
+                            <tbody id="report-vacant-tbody"><tr><td colspan="7" style="text-align:center;color:var(--text-muted);">Click Load Report to view real-time database view results.</td></tr></tbody>
+                        </table></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div><div class="card-title">Due Rent</div><div class="card-subtitle">Pending rent schedules from database view</div></div>
+                            <button class="btn btn-secondary btn-sm" onclick="loadReport('due_rent','report-duerent-tbody')">Load Report</button>
+                        </div>
+                        <div class="table-responsive"><table class="custom-table">
+                            <thead><tr><th>Schedule ID</th><th>Tenant</th><th>Due Date</th><th>Amount Due</th><th>Status</th></tr></thead>
+                            <tbody id="report-duerent-tbody"><tr><td colspan="5" style="text-align:center;color:var(--text-muted);">Click Load Report to view real-time database view results.</td></tr></tbody>
+                        </table></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div><div class="card-title">Lease Expiry Report</div><div class="card-subtitle">Leases nearing expiration date</div></div>
+                            <button class="btn btn-secondary btn-sm" onclick="loadReport('lease_expiry_report','report-expiry-tbody')">Load Report</button>
+                        </div>
+                        <div class="table-responsive"><table class="custom-table">
+                            <thead><tr><th>Lease ID</th><th>Tenant</th><th>Unit</th><th>Start Date</th><th>End Date</th><th>Monthly Rent</th></tr></thead>
+                            <tbody id="report-expiry-tbody"><tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Click Load Report to view real-time database view results.</td></tr></tbody>
+                        </table></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div><div class="card-title">Owner Income</div><div class="card-subtitle">Total rental income collected per owner</div></div>
+                            <button class="btn btn-secondary btn-sm" onclick="loadReport('owner_income','report-income-tbody')">Load Report</button>
+                        </div>
+                        <div class="table-responsive"><table class="custom-table">
+                            <thead><tr><th>Owner ID</th><th>Owner Name</th><th>Total Income</th></tr></thead>
+                            <tbody id="report-income-tbody"><tr><td colspan="3" style="text-align:center;color:var(--text-muted);">Click Load Report to view real-time database view results.</td></tr></tbody>
+                        </table></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div><div class="card-title">Tenant History</div><div class="card-subtitle">All tenant lease records across properties</div></div>
+                            <button class="btn btn-secondary btn-sm" onclick="loadReport('tenant_history','report-tenanthist-tbody')">Load Report</button>
+                        </div>
+                        <div class="table-responsive"><table class="custom-table">
+                            <thead><tr><th>Tenant ID</th><th>Tenant</th><th>Property</th><th>Unit</th><th>Start</th><th>End</th><th>Rent</th><th>Status</th></tr></thead>
+                            <tbody id="report-tenanthist-tbody"><tr><td colspan="8" style="text-align:center;color:var(--text-muted);">Click Load Report to view real-time database view results.</td></tr></tbody>
+                        </table></div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

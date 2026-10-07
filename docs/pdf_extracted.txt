@@ -1,0 +1,730 @@
+--- PAGE 1 ---
+DBMS Course Project - Final Presentation Instructions
+Page 1
+Instructions for Final Presentation
+DBMS Course Project: AIML Whales and AIML Panthers
+Dear Learners,
+Project type
+Individual (one learner per project)
+Sections
+AIML Whales and AIML Panthers (merged; both sections present together for
+the same project title)
+Hard deadline
+Project report upload to GitHub by 10 October 2026 (no extensions)
+Presentation
+timings
+9:00 am to 5:00 pm on your allotted day; 10 minutes per project title
+Tuesday, 6
+October 2026
+Serial Nos. 1 to 35
+Wednesday, 7
+October 2026
+Serial Nos. 36 to 70
+Marks
+Presentation-I (10) and Presentation-II (10) are already evaluated. The final
+10 marks cover Presentation-III (UI demo): 5 marks and the Project
+Report: 5 marks.
+A. GitHub Setup
+1
+Create a GitHub account if you do not have one.
+2
+Create a public repository named DBMS-Course-Project.
+3
+Inside it, create four folders: Presentation-I, Presentation-II, Presentation-III, Project-Report.
+4
+Add a README.md with your name, roll number, project title and a one-line description.
+5
+Make regular commits; the commit history will be checked. Share the repository link as instructed
+by your faculty.
+B. Already Presented: Upload Required
+
+Presentation-I: your Problem Description PPT/PDF.
+
+Presentation-II: your PPT/PDF, ER diagram image, a .sql file with all commands (database and
+table creation, insertion, SELECT statements), and the solution to the query given to you during
+Presentation-II.
+These should be in the repository by 10 October 2026. They carry no new marks but are required for
+your final submission to be complete.
+C. Presentation-III: User Interface (5 marks)
+Present a working UI connected to your MySQL database that supports:
+
+Insertion of records
+
+Deletion of records
+
+Viewing of records
+Demonstrate each operation live, showing the change reflected in the database.
+
+--- PAGE 2 ---
+DBMS Course Project - Final Presentation Instructions
+Page 2
+Upload to Presentation-III: the PPT/PDF, source code, and screenshots of every UI screen (insert,
+delete, view, before and after).
+D. Project Report (5 marks; upload to Project-Report, PDF)
+Contents:
+1
+Cover page (title, name, roll number, course, faculty name, academic year)
+2
+Abstract
+3
+Introduction and problem statement
+4
+Objectives and scope
+5
+Software and hardware requirements
+6
+ER diagram
+7
+Relational schema and normalization
+8
+Data dictionary (table structure, data types, constraints)
+9
+SQL commands used (DDL, DML) with sample outputs
+10
+Queries with outputs, including the query given during Presentation-II
+11
+UI design and screenshots
+12
+Implementation details (technology stack, DB connectivity, key code snippets)
+13
+Testing (test cases and results)
+14
+Conclusion and future enhancements
+15
+References
+16
+Appendix: GitHub repository link
+E. General Rules
+
+The project report must be uploaded to GitHub by 10 October 2026. This is a hard deadline; late
+submissions will not be accepted. The Presentation-III demo must be given on your allotted day.
+
+Be present on your allotted day between 9:00 am and 5:00 pm, as per the merged list (see
+schedule). Absence without prior permission will result in zero marks.
+
+You must be able to explain every part of your project and answer questions on it.
+
+Work must be original. Copied projects will receive zero.
+
+--- PAGE 3 ---
+DBMS Course Project - Final Presentation Instructions
+Page 3
+Presentation Schedule: AIML Whales and AIML
+Panthers
+Both sections present together for the same project title; a dash means no student is listed for that title yet. 10 minutes
+per title, starting at 9:00 am each day. Every title begins with "Design and Implementation of a Database Management
+System for", which is omitted below.
+Tuesday, 6 October 2026 (Serial Nos. 1 to 35)
+Serial
+No.
+Time
+Project Title
+AIML Whales (Name,
+Roll No.)
+AIML Panthers (Name,
+Roll No.)
+1
+9:00 - 9:10 am
+Student and College Management
+System
+Yashwant Vallabhaneni
+24WU0102026
+Atharva Kanojia
+25WU0101019
+2
+9:10 - 9:20 am
+Library Circulation and Digital
+Resource Management System
+Rohan Shikhar
+25WU0101112
+C Charith
+25WU0101026
+3
+9:20 - 9:30 am
+Hospital Appointment and Patient
+Care Management System
+Sampriti Pal
+25WU0101121
+Shaik Imaduddin
+25WU0101048
+4
+9:30 - 9:40 am
+Pharmacy Prescription and
+Medicine Stock Management
+System
+Sayyed Alsaboor Khalil
+25WU0101125
+Yettam Abhinav Sri Ram
+25WU0101158
+5
+9:40 - 9:50 am
+Blood Bank Donation and Issue
+Management System
+Soubhik Ghosh
+25WU0101137
+Ganji Sai Madhav
+25WU0102081
+6
+9:50 - 10:00 am
+Hostel Accommodation and
+Student Services Management
+System
+Vallamkondu Sai
+Jaideep
+25WU0101149
+Kartikeya Sai Harsha
+Parcha
+25WU0102116
+7
+10:00 - 10:10 am
+Canteen Food Ordering and
+Billing Management System
+Beeram Sri Ram
+25WU0102040
+Kasani Hansith Raj
+25WU0102117
+8
+10:10 - 10:20 am
+Retail Inventory and Sales
+Management System
+Krish Chhotoo Ghadge
+25WU0102132
+Kashvi Sahoo
+25WU0102118
+9
+10:20 - 10:30 am
+Multi-Warehouse Stock Transfer
+Management System
+Bandi Rutwik Reddy
+25WU0102231
+Katamreddy Shreenandh
+25WU0102119
+10
+10:30 - 10:40 am
+Vehicle Service Centre
+Management System
+Sahitya Korrapati
+25WU0102234
+Katrala Devika
+25WU0102120
+11
+10:40 - 10:50 am
+Fuel Station Sales and Tank
+Inventory Management System
+Sai Sri Charan Chunduri
+25WU0102235
+Kavali Sandeep
+25WU0102121
+12
+10:50 - 11:00 am
+Hotel Reservation and Guest
+Services Management System
+B Sai Subhash Chandra
+Reddy
+25WU0102236
+Kavuri Rohan Chowdary
+25WU0102122
+13
+11:00 - 11:10 am
+Restaurant Table Reservation and
+Food Service Management
+System
+Sakhunala Sahaja
+25WU0102237
+Kavuru Devi Srikar
+25WU0102123
+14
+11:10 - 11:20 am
+E-Commerce Order, Return and
+Refund Management System
+Heerapuram
+Mohammed Abdul
+Ghaffar
+25WU0102238
+Kedam Prudhvi Raj
+25WU0102124
+15
+11:20 - 11:30 am
+Courier Parcel Booking and
+Tracking Management System
+Sambangi Urjitha Sai
+25WU0102239
+Dara Keerthana
+25WU0102125
+16
+11:30 - 11:40 am
+Bus Reservation and Fleet
+Scheduling System
+Mangala Samyuktha
+25WU0102241
+Khareedu Chinmai Datta
+25WU0102126
+17
+11:40 - 11:50 am
+Railway Ticket Reservation and
+Journey Management System
+Sangana Sujay Reddy
+25WU0102242
+Komal Damodar Maniyar
+25WU0102127
+
+--- PAGE 4 ---
+DBMS Course Project - Final Presentation Instructions
+Page 4
+Serial
+No.
+Time
+Project Title
+AIML Whales (Name,
+Roll No.)
+AIML Panthers (Name,
+Roll No.)
+18
+11:50 am - 12:00
+pm
+Airline Reservation and Flight
+Operations Management System
+Sanjyit Suresh Kumar
+25WU0102243
+Konduru Sharva Teja
+25WU0102128
+19
+12:00 - 12:10 pm
+Car Rental Reservation and
+Vehicle Return Management
+System
+Sansita M
+25WU0102244
+Koneri Mithul
+25WU0102129
+20
+12:10 - 12:20 pm
+Smart Parking Lot Allocation and
+Billing System
+Sarabjyot Singh Jassal
+25WU0102245
+Kosanam Mithesh
+25WU0102130
+21
+12:20 - 12:30 pm
+School Transport Route and
+Student Pickup Management
+System
+Sardar Trilochan Singh
+25WU0102246
+Kota Nihal Reddy
+25WU0102131
+22
+12:30 - 12:40 pm
+Campus Placement and
+Recruitment Drive Management
+System
+Kulkarni Sarthak
+25WU0102247
+Krishnamaneni Sai
+Praharsha
+25WU0102133
+23
+12:40 - 12:50 pm
+Alumni Mentoring and
+Engagement Management
+System
+Sashrika Reddy Alimity
+25WU0102248
+Kurakula Harshitha
+25WU0102134
+24
+12:50 - 1:00 pm
+Examination Scheduling and
+Result Processing System
+Settipalli Satwik Siva Sai
+25WU0102249
+Lade Bilvesh Datta
+25WU0102135
+25
+1:00 - 1:10 pm
+Faculty Workload and Timetable
+Management System
+Shaik Abdul Raheem
+25WU0102250
+Lingampally Mohith
+25WU0102137
+26
+1:10 - 1:20 pm
+Student Attendance and Leave
+Approval System
+Shaikh Humzah
+25WU0102251
+M Pranay Kumar Reddy
+25WU0102138
+27
+1:20 - 1:30 pm
+Scholarship and Financial Aid
+Management System
+Shailesh Charan
+Pathlavath
+25WU0102252
+M Sai Manoj
+25WU0102139
+28
+1:30 - 1:40 pm
+Research Project, Publication and
+Grant Management System
+Gandla Sharvari
+25WU0102253
+Maddala Sai Chethana
+25WU0102142
+29
+1:40 - 1:50 pm
+Laboratory Equipment Booking
+and Maintenance System
+Shaurya Dhingra
+25WU0102254
+Mallavarapu Suchith
+25WU0102144
+30
+1:50 - 2:00 pm
+Sports Club Membership and
+Tournament Management System
+Sheikh Arsh Ali
+25WU0102255
+Mamunoori Reethu
+Chandra
+25WU0102146
+31
+2:00 - 2:10 pm
+Event Registration and Venue
+Scheduling System
+Shrestha Mal
+25WU0102258
+Manash Roy
+25WU0102147
+32
+2:10 - 2:20 pm
+Academic Conference Paper
+Submission and Review System
+Shriansh Singh Chandel
+25WU0102259
+Mandhadapu Nakshathra
+Deepa
+25WU0102148
+33
+2:20 - 2:30 pm
+Training Programme and
+Certification Management System
+Shudhanshu Shekhar
+25WU0102260
+Mane Heya
+25WU0102149
+34
+2:30 - 2:40 pm
+Online Course Learning Progress
+Management System
+Siddhant Agarwal
+25WU0102262
+Manthena Naga Sri
+Rohan
+25WU0102151
+35
+2:40 - 2:50 pm
+Internship Application and
+Progress Monitoring System
+Siddhavatam Pooja
+Ananya
+25WU0102264
+Martala Harsha Vardhan
+Reddy
+25WU0102152
+
+--- PAGE 5 ---
+DBMS Course Project - Final Presentation Instructions
+Page 5
+Wednesday, 7 October 2026 (Serial Nos. 36 to 70)
+Serial
+No.
+Time
+Project Title
+AIML Whales (Name,
+Roll No.)
+AIML Panthers (Name,
+Roll No.)
+36
+9:00 - 9:10 am
+Employee Payroll and Statutory
+Deduction Management System
+Siddiqui Muneeb Ul
+Hassan Sharif Ul Has
+25WU0102265
+Masula Megha Chayana
+25WU0102153
+37
+9:10 - 9:20 am
+Recruitment and Applicant
+Tracking System
+Sirigiri Sruti
+25WU0102266
+Mayank Panigrahi
+25WU0102154
+38
+9:20 - 9:30 am
+Employee Attendance, Shift and
+Leave Management System
+Sista Sri Shanmukh
+25WU0102268
+Maydhaansh Nanda
+25WU0102155
+39
+9:30 - 9:40 am
+IT Helpdesk and Asset Support
+Management System
+Dasuri Sohan Yadav
+25WU0102269
+Md Aali Rahman
+25WU0102156
+40
+9:40 - 9:50 am
+Software License and
+Subscription Management System
+Somarlapati Sujith
+Reddy
+25WU0102270
+Mihir Kalway
+25WU0102157
+41
+9:50 - 10:00 am
+Campus Facility Maintenance
+Request Management System
+Soumya Purohit
+25WU0102272
+Mithi Jaiswal
+25WU0102158
+42
+10:00 - 10:10 am
+Residential Society Resident and
+Maintenance Billing System
+Sri Pranav Ramini
+25WU0102273
+Mohammad Saalim
+25WU0102159
+43
+10:10 - 10:20 am
+Property Rental and Lease
+Management System
+Sriram Rishil
+25WU0102274
+Mohammad Zeeshan Bin
+Sadiq
+25WU0102160
+44
+10:20 - 10:30 am
+Construction Material and Site
+Progress Management System
+Shubham .
+25WU0102275
+Mohammed Ali
+25WU0102161
+45
+10:30 - 10:40 am
+Crop Planning and Farm Input
+Management System
+Sufiyan Yusuf Jahan
+25WU0102276
+Mohammed Ayman
+25WU0102162
+46
+10:40 - 10:50 am
+Dairy Farm Herd and Milk
+Collection Management System
+Surakanti Nymisha
+Reddy
+25WU0102279
+Mohammed Zaid
+25WU0102163
+47
+10:50 - 11:00 am
+Veterinary Clinic and Animal
+Treatment Management System
+Surya Siddharath
+Yerramilli
+25WU0102280
+Muddasani Riya Reddy
+25WU0102167
+48
+11:00 - 11:10 am
+Fish Farm Pond and Harvest
+Management System
+Suryansh Singh
+25WU0102281
+Mugula Sahan Yadav
+25WU0102168
+49
+11:10 - 11:20 am
+Cold Storage Commodity and
+Chamber Management System
+Syed Hisham Azam
+25WU0102282
+Mulakala Manoj Sri
+Sathya Charan
+25WU0102169
+50
+11:20 - 11:30 am
+Municipal Waste Collection and
+Recycling Management System
+Syed Mohammed Awais
+Khadiri
+25WU0102283
+Muthoju Keertan
+25WU0102171
+51
+11:30 - 11:40 am
+Water Tanker Booking and
+Delivery Management System
+T Chandrahas
+25WU0102284
+Nabiha Fatima
+25WU0102172
+52
+11:40 - 11:50 am
+Solar Installation and
+Maintenance Service
+Management System
+Tanmay Singh
+25WU0102286
+Sirisadula Sanjay Kranthi
+25WU0102267
+53
+11:50 am - 12:00
+pm
+Health Insurance Policy and
+Claims Management System
+Tanush Reddy Vanga
+25WU0102287
+Tanishqa Boinipelly
+25WU0102285
+54
+12:00 - 12:10 pm
+Microfinance Loan and
+Repayment Management System
+Suragani Bhargavsai
+25WU0102324
+Pranay Kamandla
+25WU0102328
+55
+12:10 - 12:20 pm
+Bank Account and Transaction
+Management System
+Mohammad Sufiyan
+Ahmed
+25WU0102330
+Adaboina Rohan Reddy
+25WU0102329
+
+--- PAGE 6 ---
+DBMS Course Project - Final Presentation Instructions
+Page 6
+Serial
+No.
+Time
+Project Title
+AIML Whales (Name,
+Roll No.)
+AIML Panthers (Name,
+Roll No.)
+56
+12:20 - 12:30 pm
+Cooperative Society Membership
+and Savings Management System
+Daibala Sowmya
+25WU0102331
+Sayini Pranathi
+25WU0104024
+57
+12:30 - 12:40 pm
+NGO Donation, Beneficiary and
+Volunteer Management System
+Raghav Dadhich
+25WU0102339
+Likhith Kumar Rupner
+25WU0102136
+58
+12:40 - 12:50 pm
+Legal Case and Client
+Management System
+Salibindla Abhinai
+Reddy
+25WU0102347
+M. Gagan
+25WU0102150
+59
+12:50 - 1:00 pm
+Police Complaint and Evidence
+Tracking System
+Shreshtha Kumar
+25WU0103037
+-
+60
+1:00 - 1:10 pm
+Disaster Relief Resource and
+Camp Management System
+-
+-
+61
+1:10 - 1:20 pm
+Public Distribution Ration Shop
+Management System
+-
+-
+62
+1:20 - 1:30 pm
+Municipal Birth and Death
+Certificate Management System
+-
+-
+63
+1:30 - 1:40 pm
+Tourism Package and Travel
+Booking Management System
+-
+-
+64
+1:40 - 1:50 pm
+Museum Collection, Exhibition
+and Visitor Management System
+-
+-
+65
+1:50 - 2:00 pm
+Cinema Screening and Ticket
+Booking System
+-
+-
+66
+2:00 - 2:10 pm
+Salon and Spa Appointment
+Management System
+-
+-
+67
+2:10 - 2:20 pm
+Gym Membership and Fitness
+Session Management System
+-
+-
+68
+2:20 - 2:30 pm
+Tailoring and Boutique Order
+Management System
+-
+-
+69
+2:30 - 2:40 pm
+Printing Press Job Order and
+Production Management System
+-
+-
+70
+2:40 - 2:50 pm
+Bookstore Inventory and Online
+Sales Management System
+-
+-

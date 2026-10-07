@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment / Secrets
+.env
+*.env
+config.local.py
+
+# Database credentials (backend/db.py contains credentials - do NOT commit if sharing publicly)
+# backend/db.py  # Uncomment this line to also exclude db.py itself
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temp / Build
+tmp/
+temp/
+dist/
+build/
+*.egg-info/
