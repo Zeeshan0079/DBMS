@@ -658,3 +658,76 @@ def get_report(view_name):
     cursor.close()
     conn.close()
     return rows
+
+def global_search(query_str):
+    """Perform a global search across properties, units, tenants, leases, and maintenance requests."""
+    if not query_str or len(query_str.strip()) < 1:
+        return {'properties': [], 'units': [], 'tenants': [], 'leases': [], 'maintenance': []}
+    
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    sp = f"%{query_str.strip()}%"
+    
+    # 1. Properties
+    cursor.execute("""
+        SELECT p.property_id, p.address, p.city, p.property_type, o.name AS owner_name
+        FROM property p
+        LEFT JOIN owner o ON p.owner_id = o.owner_id
+        WHERE p.address LIKE %s OR p.city LIKE %s OR p.property_type LIKE %s OR o.name LIKE %s
+        LIMIT 5;
+    """, (sp, sp, sp, sp))
+    properties = [serialize_row(r) for r in cursor.fetchall()]
+    
+    # 2. Units
+    cursor.execute("""
+        SELECT u.unit_id, u.unit_no, u.status, u.rent, p.address AS property_address, p.city
+        FROM unit u
+        JOIN property p ON u.property_id = p.property_id
+        WHERE u.unit_no LIKE %s OR u.status LIKE %s OR p.address LIKE %s OR p.city LIKE %s
+        LIMIT 5;
+    """, (sp, sp, sp, sp))
+    units = [serialize_row(r) for r in cursor.fetchall()]
+    
+    # 3. Tenants
+    cursor.execute("""
+        SELECT tenant_id, name, email, phone
+        FROM tenant
+        WHERE name LIKE %s OR email LIKE %s OR phone LIKE %s
+        LIMIT 5;
+    """, (sp, sp, sp))
+    tenants = [serialize_row(r) for r in cursor.fetchall()]
+    
+    # 4. Leases
+    cursor.execute("""
+        SELECT l.lease_id, l.status, l.rent, t.name AS tenant_name, u.unit_no, p.address AS property_address
+        FROM lease l
+        JOIN tenant t ON l.tenant_id = t.tenant_id
+        JOIN unit u ON l.unit_id = u.unit_id
+        JOIN property p ON u.property_id = p.property_id
+        WHERE t.name LIKE %s OR u.unit_no LIKE %s OR p.address LIKE %s OR l.status LIKE %s
+        LIMIT 5;
+    """, (sp, sp, sp, sp))
+    leases = [serialize_row(r) for r in cursor.fetchall()]
+    
+    # 5. Maintenance
+    cursor.execute("""
+        SELECT mr.request_id, mr.description, mr.status, t.name AS tenant_name, u.unit_no
+        FROM maintenance_request mr
+        JOIN tenant t ON mr.tenant_id = t.tenant_id
+        JOIN unit u ON mr.unit_id = u.unit_id
+        WHERE mr.description LIKE %s OR t.name LIKE %s OR u.unit_no LIKE %s OR mr.status LIKE %s
+        LIMIT 5;
+    """, (sp, sp, sp, sp))
+    maintenance = [serialize_row(r) for r in cursor.fetchall()]
+    
+    cursor.close()
+    conn.close()
+    
+    return {
+        'properties': properties,
+        'units': units,
+        'tenants': tenants,
+        'leases': leases,
+        'maintenance': maintenance
+    }
+

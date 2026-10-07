@@ -329,6 +329,20 @@ def api_report(report_name):
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+# ==============================================================================
+# GLOBAL SEARCH API
+# ==============================================================================
+
+@app.route('/api/search', methods=['GET'])
+def api_global_search():
+    try:
+        q = request.args.get('q', '').strip()
+        data = db.global_search(q)
+        return jsonify({'status': 'success', 'data': data})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 if __name__ == '__main__':
     print("Starting PropertyDesk Server on http://127.0.0.1:5000 ...")
     app.run(host='127.0.0.1', port=5000, debug=True)
+

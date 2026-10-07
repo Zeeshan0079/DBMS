@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initDatabaseStatus();
     loadDashboardMetrics();
+    initGlobalSearch();
 });
 
 // Cache for global dropdown data
@@ -1372,3 +1373,202 @@ function escapeJs(str) {
     if (!str) return '';
     return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
+
+/* ==========================================================================
+   8. GLOBAL HEADER SEARCH CONTROLLER
+   ========================================================================== */
+
+function initGlobalSearch() {
+    const searchInput = document.getElementById('global-search-input');
+    const clearBtn = document.getElementById('global-search-clear');
+    const dropdown = document.getElementById('global-search-results');
+    if (!searchInput || !dropdown) return;
+
+    let debounceTimer = null;
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        if (query.length > 0) {
+            if (clearBtn) clearBtn.classList.remove('hidden');
+        } else {
+            if (clearBtn) clearBtn.classList.add('hidden');
+            dropdown.classList.add('hidden');
+            dropdown.innerHTML = '';
+            return;
+        }
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            fetchGlobalSearchResults(query);
+        }, 250);
+    });
+
+    searchInput.addEventListener('focus', () => {
+        const query = searchInput.value.trim();
+        if (query.length > 0 && dropdown.children.length > 0) {
+            dropdown.classList.remove('hidden');
+        }
+    });
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearBtn.classList.add('hidden');
+            dropdown.classList.add('hidden');
+            dropdown.innerHTML = '';
+            searchInput.focus();
+        });
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-bar')) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            dropdown.classList.add('hidden');
+        }
+    });
+}
+
+function fetchGlobalSearchResults(query) {
+    const dropdown = document.getElementById('global-search-results');
+    fetch(`/api/search?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(res => {
+            if (res.status === 'success') {
+                renderGlobalSearchResults(res.data, query);
+            }
+        })
+        .catch(err => {
+            console.error('Global search error:', err);
+        });
+}
+
+function renderGlobalSearchResults(data, query) {
+    const dropdown = document.getElementById('global-search-results');
+    dropdown.innerHTML = '';
+
+    const { properties = [], units = [], tenants = [], leases = [], maintenance = [] } = data;
+    const totalCount = properties.length + units.length + tenants.length + leases.length + maintenance.length;
+
+    if (totalCount === 0) {
+        dropdown.innerHTML = `<div class="search-no-results">No results found matching "<strong>${escapeHtml(query)}</strong>"</div>`;
+        dropdown.classList.remove('hidden');
+        return;
+    }
+
+    let html = '';
+
+    if (properties.length > 0) {
+        html += `<div class="search-group-header">Properties (${properties.length})</div>`;
+        properties.forEach(p => {
+            html += `
+                <div class="search-result-item" onclick="handleSearchResultClick('properties', '${escapeJs(p.address)}')">
+                    <div class="search-result-main">
+                        <div class="search-result-title">🏢 ${escapeHtml(p.address)}</div>
+                        <div class="search-result-sub">${escapeHtml(p.city)} • Owner: ${escapeHtml(p.owner_name || 'N/A')}</div>
+                    </div>
+                    <span class="search-result-badge">${escapeHtml(p.property_type)}</span>
+                </div>
+            `;
+        });
+    }
+
+    if (units.length > 0) {
+        html += `<div class="search-group-header">Units (${units.length})</div>`;
+        units.forEach(u => {
+            const statusClass = (u.status || '').toLowerCase();
+            html += `
+                <div class="search-result-item" onclick="handleSearchResultClick('units', '${escapeJs(u.unit_no)}')">
+                    <div class="search-result-main">
+                        <div class="search-result-title">🚪 Unit ${escapeHtml(u.unit_no)}</div>
+                        <div class="search-result-sub">${escapeHtml(u.property_address)} (${escapeHtml(u.city)})</div>
+                    </div>
+                    <span class="search-result-badge ${statusClass}">${escapeHtml(u.status)}</span>
+                </div>
+            `;
+        });
+    }
+
+    if (tenants.length > 0) {
+        html += `<div class="search-group-header">Tenants (${tenants.length})</div>`;
+        tenants.forEach(t => {
+            html += `
+                <div class="search-result-item" onclick="handleSearchResultClick('tenants', '${escapeJs(t.name)}')">
+                    <div class="search-result-main">
+                        <div class="search-result-title">👤 ${escapeHtml(t.name)}</div>
+                        <div class="search-result-sub">📧 ${escapeHtml(t.email)} • 📞 ${escapeHtml(t.phone)}</div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    if (leases.length > 0) {
+        html += `<div class="search-group-header">Leases (${leases.length})</div>`;
+        leases.forEach(l => {
+            const statusClass = (l.status || '').toLowerCase();
+            html += `
+                <div class="search-result-item" onclick="handleSearchResultClick('leases', '${escapeJs(l.tenant_name)}')">
+                    <div class="search-result-main">
+                        <div class="search-result-title">📄 Lease: ${escapeHtml(l.tenant_name)}</div>
+                        <div class="search-result-sub">Unit ${escapeHtml(l.unit_no)} • ${escapeHtml(l.property_address)}</div>
+                    </div>
+                    <span class="search-result-badge ${statusClass}">${escapeHtml(l.status)}</span>
+                </div>
+            `;
+        });
+    }
+
+    if (maintenance.length > 0) {
+        html += `<div class="search-group-header">Maintenance (${maintenance.length})</div>`;
+        maintenance.forEach(m => {
+            const statusClass = (m.status || '').toLowerCase();
+            html += `
+                <div class="search-result-item" onclick="handleSearchResultClick('maintenance', '${escapeJs(m.tenant_name)}')">
+                    <div class="search-result-main">
+                        <div class="search-result-title">🛠️ ${escapeHtml(m.description)}</div>
+                        <div class="search-result-sub">Tenant: ${escapeHtml(m.tenant_name)} • Unit ${escapeHtml(m.unit_no)}</div>
+                    </div>
+                    <span class="search-result-badge ${statusClass}">${escapeHtml(m.status)}</span>
+                </div>
+            `;
+        });
+    }
+
+    dropdown.innerHTML = html;
+    dropdown.classList.remove('hidden');
+}
+
+function handleSearchResultClick(pageName, searchKeyword) {
+    const dropdown = document.getElementById('global-search-results');
+    if (dropdown) dropdown.classList.add('hidden');
+
+    const navLink = document.querySelector(`.sidebar-nav .nav-link[data-page="${pageName}"]`);
+    if (navLink) {
+        navLink.click();
+    }
+
+    setTimeout(() => {
+        if (pageName === 'properties') {
+            const input = document.getElementById('properties-search-input');
+            if (input) { input.value = searchKeyword; input.dispatchEvent(new Event('input')); }
+        } else if (pageName === 'units') {
+            const input = document.getElementById('units-search-input');
+            if (input) { input.value = searchKeyword; input.dispatchEvent(new Event('input')); }
+        } else if (pageName === 'tenants') {
+            const input = document.getElementById('tenants-search-input');
+            if (input) { input.value = searchKeyword; input.dispatchEvent(new Event('input')); }
+        } else if (pageName === 'leases') {
+            const input = document.getElementById('leases-search-input');
+            if (input) { input.value = searchKeyword; input.dispatchEvent(new Event('input')); }
+        } else if (pageName === 'maintenance') {
+            const input = document.getElementById('maintenance-search-input');
+            if (input) { input.value = searchKeyword; input.dispatchEvent(new Event('input')); }
+        }
+    }, 150);
+}
+
