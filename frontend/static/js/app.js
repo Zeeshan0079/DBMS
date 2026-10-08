@@ -968,6 +968,7 @@ function renderTenantsTable(tenants) {
             <td>${escapeHtml(t.id_proof_no || '—')}</td>
             <td class="actions-cell">
                 <button class="btn btn-sm btn-action-view" onclick="openViewTenantModal(${t.tenant_id})">View</button>
+                <button class="btn btn-sm btn-action-edit" onclick="openEditTenantModal(${t.tenant_id})">Edit</button>
                 <button class="btn btn-sm btn-action-delete" onclick="confirmDeleteTenant(${t.tenant_id}, '${escapeJs(t.name)}')">Delete</button>
             </td>
         </tr>
@@ -1060,6 +1061,66 @@ function openViewTenantModal(tenantId) {
             `;
             openModal(`Tenant Details #${t.tenant_id}`, bodyHtml, `<button class="btn btn-secondary" onclick="closeModal()">Close</button>`);
         });
+}
+
+/* Edit Tenant Modal */
+function openEditTenantModal(tenantId) {
+    fetch(`/api/tenants/${tenantId}`)
+        .then(res => res.json())
+        .then(res => {
+            if (res.status !== 'success') { showToast('Failed to load tenant details.', 'error'); return; }
+            const t = res.data;
+            const bodyHtml = `
+                <form id="edit-tenant-form">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="edit-t-name" class="form-control" value="${escapeHtml(t.name)}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="edit-t-phone" class="form-control" value="${escapeHtml(t.phone || '')}">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="edit-t-email" class="form-control" value="${escapeHtml(t.email || '')}">
+                    </div>
+                    <div class="form-group">
+                        <label>ID Proof Number</label>
+                        <input type="text" id="edit-t-id-proof" class="form-control" value="${escapeHtml(t.id_proof_no || '')}">
+                    </div>
+                </form>
+            `;
+            const footerHtml = `
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitEditTenantForm(${t.tenant_id})">Update Tenant</button>
+            `;
+            openModal(`Edit Tenant #${t.tenant_id}`, bodyHtml, footerHtml);
+        })
+        .catch(() => showToast('Server error while loading tenant.', 'error'));
+}
+
+function submitEditTenantForm(tenantId) {
+    const name = document.getElementById('edit-t-name').value.trim();
+    const phone = document.getElementById('edit-t-phone').value.trim();
+    const email = document.getElementById('edit-t-email').value.trim();
+    const id_proof_no = document.getElementById('edit-t-id-proof').value.trim();
+    if (!name) { showToast('Tenant name is required.', 'error'); return; }
+    fetch(`/api/tenants/${tenantId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, email, id_proof_no })
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.status === 'success') {
+            showToast(res.message || 'Tenant updated successfully!', 'success');
+            closeModal();
+            fetchTenantsList();
+        } else {
+            showToast(res.message || 'Failed to update tenant.', 'error');
+        }
+    })
+    .catch(() => showToast('Server error while updating tenant.', 'error'));
 }
 
 function confirmDeleteTenant(tenantId, name) {
